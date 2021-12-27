@@ -6,7 +6,7 @@
 {{-- internal css style part --}}
 <style>
   .page_link>a:hover {
-    font-weight:900;
+    font-weight: 900;
   }
 
   body {
@@ -100,6 +100,85 @@
     border-radius: 20px;
     height: 28px
   }
+
+  /* Rate design */
+  .rate-container {
+    /* position: absolute;
+    
+    top: 30%;
+    left: 50%; */
+    margin-left: 150%;
+    margin-top: 20%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    display: flex;
+  }
+
+  .rate-container input {
+    display: none;
+  }
+
+  .rate-container label {
+    display: block;
+    cursor: pointer;
+    width: 30px;
+  }
+
+  .rate-container label:before {
+    content: '\f005';
+    font-family: fontAwesome;
+    / position: relative;
+    */ display: block;
+    font-size: 30px;
+    color: #101010;
+  }
+
+  .rate-container label:after {
+    content: '\f005';
+    font-family: fontAwesome;
+    position: absolute;
+    display: block;
+    font-size: 30px;
+    color: #2E86C1;
+    top: 0;
+    opacity: 0;
+    transition: .5s;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+  }
+
+  .rate-container label:hover:after,
+  .rate-container label:hover~label:after,
+  .rate-container input:checked~label:after {
+    opacity: 1;
+  }
+
+  @media(max-width: 502px) {
+    .rate-container label {
+      width: 80px;
+    }
+
+    .rate-container label:before {
+      font-size: 80px;
+    }
+
+    .rate-container label:after {
+      font-size: 80px;
+    }
+  }
+
+  @media(max-width: 407px) {
+    .rate-container label {
+      width: 50px;
+    }
+
+    .rate-container label:before {
+      font-size: 50px;
+    }
+
+    .rate-container label:after {
+      font-size: 50px;
+    }
+
+  }
   }
 </style>
 
@@ -121,45 +200,116 @@
           <div class="banner_content d-md-flex justify-content-between align-items-center">
             <div class="mb-sm-5 mb-md-5">
               <h2>{{ $singleOwners->company_name }} Company</h2>
-              <p>{{ $singleOwners->desc}}</p>
-              <p><strong>Avg. reveiws</strong></p>
+              <p class="text-break">{{ $singleOwners->desc}}</p>
+              <p><strong>Company rate:{{" ".$avg_rate." out of 5" }}</strong></p>
+              <p><strong>Total Reviews: {{" ".$rate_num }}</strong></p>
             </div>
 
           </div>
-          {{-- Form section --}}
-          <div class="d-flex row">
-            <form action="{{ route('companyReview',$singleOwners->id) }}" method="post" class=" ms-5">
-              @csrf
-              <fieldset>
-                <div class="mb-3 col-12">
-                  <label for="disabledSelect" class="form-label col-3 "
-                    style="max-width: fit-content; padding:0;">Choose
-                    Review: </label>
-                  <select id="disabledSelect" class="form-select col-3 text-black" style="width:150px "
-                    name="rate-select">
-                    Choose review
-                    <option value="1" active>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <button type="submit" class="btn btn-primary col-3">Add</button>
-                </div>
 
-              </fieldset>
-            </form>
-          </div>
         </div>
 
       </div>
-
-      {{-- End Form --}}
     </div>
-
   </div>
 
-  {{-- End Company name and desc + breedcrumbs section --}}
+
+  <div class="container">
+    <div class="row w-100 justify-content-start">
+      <div class="col-12 d-flex justify-content-start mt-2 mb-5 ms-3">
+        {{-- End Company name and desc + breedcrumbs section --}}
+        {{-- Form section --}}
+        <div class="row ml-1 ">
+          <form action="{{ route('comment.store') }}" method="post" class=" ">
+            @csrf
+            <div class="row w-50 justify-content-between">
+              <div class="col-5">
+                <input type="text " name="comment" class="bg-light p-2 rounded " placeholder="Review Us!">
+              </div>
+              <div class="col-5 ml-2 ">
+                <div class="rate-container ">
+                  <input type="radio" name="like" id="star1" value="5"><label for="star1"></label>
+                  <input type="radio" name="like" id="star2" value="4"><label for="star2"></label>
+                  <input type="radio" name="like" id="star3" value="3"><label for="star3"></label>
+                  <input type="radio" name="like" id="star4" value="2"><label for="star4"></label>
+                  <input type="radio" name="like" id="star5" value="1"><label for="star5"></label>
+                </div>
+              </div>
+
+              <div>
+
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="owner_id" value="{{ $singleOwners->id }}">
+                <button type="submit" class="btn btn-primary ml-5">Add Review</button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Show Services
+                </button>
+
+              </div>
+            </div>
+            </fieldset>
+          </form>
+        </div>
+        {{-- End Form --}}
+      </div>
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Latest Reviews</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              @foreach ($services as $service)
+              @if($service->owner_id === $singleOwners->id)
+              <div class="p-3 mb-2" style="border-bottom: 1px solid gray; ">
+                <h4 class=""><strong>{{ $service->title}}</strong></h4>
+                <img src="{{ asset($service->service_image) }}" alt="service_image" width="100%" srcset="">
+                <p class="text-break">{{ $service->desc}}</p>
+              </div>
+              @endif
+              @endforeach()
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="col-12 mt-5 overflow-auto " style="height: 700px" data-bs-spy="scroll">
+        @foreach ($comments as $comment)
+        <div class="item mb-5">
+          <div class="testimony-wrap d-flex">
+            <div class="user-img" style="background-image: url({{ asset($comment->user->image) }})">
+            </div>
+            <div class="text pl-4 ">
+              <span class="quote d-flex align-items-center justify-content-center">
+                <i class="icon-quote-left"></i>
+              </span>
+              <h4 class=""><strong>{{ $comment->user->name}}</strong></h4>
+              <p class="text-break">{{ $comment->comment}}</p>
+
+              <h6> <strong> Ratted {{ $comment->like}} out of 5</strong></h6>
+              <span class="float-right"> {{ $comment->created_at}} </span>
+            </div>
+          </div>
+        </div>
+        @endforeach
+
+      </div>
+
+    </div>
+  </div>
+
 
 
 </section>

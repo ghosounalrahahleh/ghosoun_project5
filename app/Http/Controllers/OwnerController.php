@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Owner;
+use App\Models\Comment;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreOwnerRequest;
-use App\Http\Requests\UpdateOwnerRequest;
+use App\Models\User;
 use App\Models\Admin;
 use App\Models\Review;
-use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use App\Http\Requests\StoreOwnerRequest;
+use App\Http\Requests\UpdateOwnerRequest;
+use App\Models\Service;
 use Illuminate\Support\Facades\Hash;
 
 class OwnerController extends Controller
@@ -28,26 +31,27 @@ class OwnerController extends Controller
 
     public function getcompanies()
     {
-        $users         = User::all();
-        $owner         = Owner::all();
-        $category      = Category::all();
-        $reviews       = Review::all();
-        $owner_counter = count($owner);
-        $users_counter = count($users);
+        $users           = User::all();
+        $owner           = Owner::all();
+        $category        = Category::all();
+        $reviews         = Review::all();
+        $owner_counter   = count($owner);
+        $users_counter   = count($users);
         $reviews_counter = count($reviews);
         return view('publicSite.index', compact(['owner', 'category', 'owner_counter', 'users_counter', 'reviews_counter']));
     }
+
+
     public function backendindex()
     {
-        $owners=Owner::all();
-        $categories=Category::all();
-        return view('backend.manage_owner',compact(['owners','categories']));
+        $owners     = Owner::all();
+        $categories = Category::all();
+        return view('backend.manage_owner', compact(['owners', 'categories']));
     }
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         // Get the search value from the request
-
         $search = $request->input('search');
-        // dd($search);
         // Search in the title and body columns from the owner table
         $owner = Owner::query()
             ->where('company_name', 'LIKE', "%{$search}%")
@@ -58,9 +62,8 @@ class OwnerController extends Controller
             ->orWhere('address', 'LIKE', "%{$search}%")
             ->get();
 
-            return view('publicSite.search',compact('owner'));
-
-        }
+        return view('publicSite.search', compact('owner'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -72,7 +75,8 @@ class OwnerController extends Controller
     }
     public function backendcreate()
     {
-        return view('backend.manage_owner');    }
+        return view('backend.manage_owner');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -86,51 +90,68 @@ class OwnerController extends Controller
     }
     public function backendstore(StoreOwnerRequest $request)
     {
-        $this->validate($request,[
-            'owner_name'=>'required|max:250',
-            'company_name'=>'required|max:250',
-            'owner_email'=>'required|max:250',
-            'company_email'=>'required|max:250',
-            'password'=>'required|max:250',
-            'desc'=>'required|max:250',
-            'num_of_employees'=>'required|max:250',
-            'address'=>'required|max:250',
-           'logo'=>'required|mimes:jpeg,png,gif,jpg',
-          ]);
-          if($request->hasFile('logo')){
-              $file=$request->logo;
-              $new_file=time().$file->getClientOriginalName();
-              $file->move('storage/owner_images/',$new_file);
-          }
-          
-          Owner::create([
-              "owner_name"=>$request->owner_name,
-              "company_name"=>$request->company_name,
-              "owner_email"=>$request->owner_email,
-              "company_email"=>$request->company_email,
-              "password"=>$request->password,
-              "desc"=>$request->desc,
-              "num_of_employees"=>$request->num_of_employees,
-              "address"=>$request->address,
-              "category_id"=>$request->category,
-              "logo"=>'storage/owner_images/'.$new_file
+        $this->validate($request, [
+            'owner_name'       => 'required|max:250',
+            'company_name'     => 'required|max:250',
+            'owner_email'      => 'required|max:250',
+            'company_email'    => 'required|max:250',
+            'password'         => 'required|max:250',
+            'desc'             => 'required|max:250',
+            'num_of_employees' => 'required|max:250',
+            'address'          => 'required|max:250',
+            'logo'             => 'required|mimes:jpeg,png,gif,jpg',
+        ]);
+        if ($request->hasFile('logo')) {
+            $file = $request->logo;
+            $new_file = time() . $file->getClientOriginalName();
+            $file->move('storage/owner_images/', $new_file);
+        }
 
-         ]);
-         return redirect()->back();
+        Owner::create([
+            "owner_name"       => $request->owner_name,
+            "company_name"     => $request->company_name,
+            "owner_email"      => $request->owner_email,
+            "company_email"    => $request->company_email,
+            "password"         => $request->password,
+            "desc"             => $request->desc,
+            "num_of_employees" => $request->num_of_employees,
+            "address" => $request->address,
+            "category_id" => $request->category,
+            "logo" => 'storage/owner_images/' . $new_file
+
+        ]);
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Owner  $owner
+     * @param  \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
 
     public function show($id)
-    {
-        $categories = Category::all();
+    {   $avg_rate='';
+        $categories   = Category::all();
         $singleOwners = Owner::find($id);
-        return view('publicSite.singleCompany', compact('categories', 'singleOwners'));
+        $users        = User::all();
+        $comments     = Comment::all();
+        $services      = Service::all();
+        $rate_count   = 0;
+        foreach ($comments as $comment) {
+            $rate_count += $comment->like;
+        }
+        if (count($comments) != 0) {
+            $avg_rate = $rate_count / count($comments);
+        } 
+        
+        $rate_num = count($comments);
+
+        return view(
+            'publicSite.singleCompany',
+            compact('categories', 'singleOwners', 'users', 'comments', 'avg_rate', 'rate_num', 'services')
+        );
     }
 
     public function showcompany(Owner $owner)
@@ -152,9 +173,9 @@ class OwnerController extends Controller
     }
     public function backendedit($id)
     {
-        $owner=Owner::find($id);
-        $categories=Category::all();
-        return view('backend.updates.owner_update',compact(['owner', 'categories']));
+        $owner = Owner::find($id);
+        $categories = Category::all();
+        return view('backend.updates.owner_update', compact(['owner', 'categories']));
     }
     /**
      * Update the specified resource in storage.
@@ -169,29 +190,27 @@ class OwnerController extends Controller
     }
     public function backendupdate(UpdateOwnerRequest $request, $id)
     {
-        $owner=Owner::find($id);
-        if($request->hasFile('logo')){
-            $file=$request->logo;
-            $new_file=time().$file->getClientOriginalName();
-            $file->move('storage/owner_images/',$new_file);
-            $owner->logo='storage/owner_images/'.$new_file;
+        $owner = Owner::find($id);
+        if ($request->hasFile('logo')) {
+            $file = $request->logo;
+            $new_file = time() . $file->getClientOriginalName();
+            $file->move('storage/owner_images/', $new_file);
+            $owner->logo = 'storage/owner_images/' . $new_file;
         }
-        
-            $owner->owner_name=$request->owner_name;
-            $owner->company_name=$request->company_name;
-            $owner->owner_email=$request->owner_email;
-            $owner->company_email=$request->company_email;
-            $owner->password=$request->password;
-            $owner->desc=$request->desc;
-            $owner->num_of_employees=$request->num_of_employees;
-            $owner->address=$request->address;
-            $owner->category_id=$request->category; 
-            $owner->update();
 
-       
-            return redirect()->route('owner.index');
+        $owner->owner_name = $request->owner_name;
+        $owner->company_name = $request->company_name;
+        $owner->owner_email = $request->owner_email;
+        $owner->company_email = $request->company_email;
+        $owner->password = $request->password;
+        $owner->desc = $request->desc;
+        $owner->num_of_employees = $request->num_of_employees;
+        $owner->address = $request->address;
+        $owner->category_id = $request->category;
+        $owner->update();
 
 
+        return redirect()->route('owner.index');
     }
     /**
      * Remove the specified resource from storage.
@@ -205,12 +224,12 @@ class OwnerController extends Controller
     }
     public function backenddestroy($request)
     {
-        $owner=Owner::find($request);
-        $owner->delete(); 
+        $owner = Owner::find($request);
+        $owner->delete();
         // return $category;
         // $category=Category::find($id);
         // $category->delete();
-        
+
         return redirect()->route('owner.index');
     }
     public function login(Request $request)

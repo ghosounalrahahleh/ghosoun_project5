@@ -13,14 +13,13 @@
         <div class="ftco-footer-widget mb-5 ml-md-4">
           <h2 class="ftco-heading-2">Categories</h2>
           <ul class="list-unstyled">
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Informtion tech</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Food & Beverage services</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Retail</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Home services</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Industrial</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Entertainment business</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Hospitality</a></li>
-            <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Medical</a></li>
+            @foreach ($categories as $category )
+            <li class="nav-item">
+              <li><a href="{{ route('allCategories',$category->id )}}"><span class="ion-ios-arrow-round-forward mr-2"></span>{{ $category->name }}</a></li>
+
+            </li>
+            @endforeach
+            
           </ul>
         </div>
       </div> --}}
@@ -87,6 +86,9 @@
   </svg></div>
 
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+  crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/9bef045b1e.js" crossorigin="anonymous"></script>
 
 <script src=" {{ asset('js/jquery.min.js') }}"></script>
 <script src=" {{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>

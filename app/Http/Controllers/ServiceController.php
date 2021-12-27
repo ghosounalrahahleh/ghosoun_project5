@@ -69,7 +69,12 @@ class ServiceController extends Controller
     {
         
     }
-
+    public function show(Service $service,$id)
+    {
+        $services=Service::find($id);
+        // $owners=Owner::all();
+        return view('publicSite.singleCompany',compact('services'));
+    }
     /**
      * Show the form for editing the specified resource.
      *

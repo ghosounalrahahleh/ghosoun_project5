@@ -27,7 +27,7 @@
     <div class="row">
 
       {{-- start aside div - top categories --}}
-      <div class="col-lg-2" style="border-right: solid 2px grey">
+      <div class="col-lg-2" style="border-right: solid .5px rgb(194, 194, 194)">
         <div class="left_sidebar_area">
           <aside class="left_widgets p_filter_widgets">
             <div>

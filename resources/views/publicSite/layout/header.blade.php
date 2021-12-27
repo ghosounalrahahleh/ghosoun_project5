@@ -24,12 +24,15 @@
   <link rel="stylesheet" href=" {{ asset('css/icomoon.css') }}">
   <link rel="stylesheet" href=" {{ asset('css/style.css') }}">
 
-  <link rel="stylesheet" href=" {{ asset('css/userProfile') }}">
+  <link rel="stylesheet" href=" {{ asset('userProfile') }}">
 
   {{-- logo font --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oldenburg&display=swap" rel="stylesheet">
+
+  {{-- font icons --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css%22%3E">
 </head>
 
 <body>

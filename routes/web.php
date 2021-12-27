@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\UserController;
@@ -39,11 +40,22 @@ Route::get('/adminLogin', function () {
 
 //reem
 Route::get('/', [CategoryController::class, 'index'])->name('landing');
+
 Route::get('/companies', [OwnerController::class, 'index'])->name('allCategories');
+
 Route::get('/companies/{id}', [OwnerController::class, 'show'])->name('company');
+
 Route::post('/companies/{company_id}', [ReviewController::class, 'store'])->name('companyReview');
+
 Route::get('singleCategory/{id}', [CategoryController::class, 'show'])->name('category');
+
 Route::get('/search', [OwnerController::class, 'search'])->name('search');
+
+Route::post('/comments',[CommentController::class,'store'])->name('comment.store');
+
+Route::get('/companies/{id}', [ServiceController::class, 'show'])->name('service');
+
+
 Route::get('/services', function () {
     return view('publicSite.services');
 })->name('services');
@@ -52,9 +64,6 @@ Route::get('/about', function () {
 })->name('about');
 
 //ahmed
-// Route::get("user/edit/{id}", [UserController::class, 'edit'])->name('useredit');
-
-// Route::post("user/update/{id}", [UserController::class, 'update'])->name('userupdate');
 
 Route::get('/', [OwnerController::class, 'getcompanies'])->name('landingComp');
 
