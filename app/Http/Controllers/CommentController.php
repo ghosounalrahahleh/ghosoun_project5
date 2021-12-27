@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\User;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 
@@ -15,7 +16,12 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $users  = User::all();
+        $comments   = Comment::all();
+        return view('comment.index', compact([
+            'users' => $users,
+            'comments' => $comments
+        ]));
     }
 
     /**
@@ -36,7 +42,14 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //
+        $create_comment = new Comment;
+        $create_comment->comment = $request->comment;
+        $create_comment->user_id = $request->user_id;
+        $create_comment->owner_id = $request->owner_id;
+        $create_comment->like = $request->like;
+
+        $create_comment->save();
+        return redirect()->route('company', $request->owner_id);
     }
 
     /**
