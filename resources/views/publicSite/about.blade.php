@@ -21,7 +21,7 @@
     <div class="container d-flex justify-content-center mt-5 ">
         
         <div class="row justify-content-center no-gutters ">
-            <div class="col-lg-4 d-flex" style="border: solid .5px #243665; ">
+            <div class="col-lg-3 d-flex m-2" style="border: solid .5px #243665; ">
                 <div class="services-2 noborder-left text-center ftco-animate">
                     <div class="icon mt-2 d-flex justify-content-center align-items-center"><span><img src="group-images/reem.jfif" alt="Reems picture" style="width: 120px; border-radius: 10%;"></span></div>
                     <div class="text media-body">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 d-flex" style="border: solid .5px  #243665;">
+            <div class="col-lg-3 d-flex m-2" style="border: solid .5px  #243665;">
                 <div class="services-2 text-center ftco-animate">
                     <div class="icon mt-2 d-flex justify-content-center align-items-center"><span> <img src="group-images/ghosoun.png" alt="Ghosouns picture" style="width: 120px; border-radius: 10%;"></span></div>
                     <div class="text media-body">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 d-flex" style="border: solid .5px  #243665;">
+            <div class="col-lg-3 d-flex m-2" style="border: solid .5px  #243665;">
                 <div class="services-2 text-center ftco-animate">
                     <div class="icon mt-2 d-flex justify-content-center align-items-center"><span><img src="group-images/omar.jpeg" alt="Reems picture" style="width: 120px; border-radius: 10%;"></span></div>
                     <div class="text media-body">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 d-flex" style="border: solid .5px  #243665;">
+            <div class="col-lg-3 d-flex m-2" style="border: solid .5px  #243665;">
                 <div class="services-2 noborder-left noborder-bottom text-center ftco-animate">
                     <div class="icon mt-2 d-flex justify-content-center align-items-center"><span><img src="group-images/nermeen.jpeg" alt="Reems picture" style="width: 120px; border-radius: 10%;"></span></div>
                     <div class="text media-body">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 d-flex" style="border: solid .5px  #243665;">
+            <div class="col-lg-3 d-flex m-2" style="border: solid .5px  #243665;">
                 <div class="services-2 text-center noborder-bottom ftco-animate">
                     <div class="icon mt-2 d-flex justify-content-center align-items-center"><span><img src="group-images/ahmad.jpg" alt="Reems picture" style="width: 120px; border-radius: 10%;"></span></div>
                     <div class="text media-body">
